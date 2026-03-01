@@ -1,0 +1,30 @@
+function doPost(e) {
+var data = JSON.parse(e.postData.contents);
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+// Clear existing rows (except headers)
+if (sheet.getLastRow() > 1) {
+sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clearContent();
+}
+
+// Mapping logic matching the app's internal keys
+var rows = data.map(function(obj) {
+return headers.map(function(h) {
+var s = h.replace(/\s+/g, '').toLowerCase();
+var key = s;
+if (s === 'visacdn?' || s === 'visacdn') key = 'visaCDN';
+else if (s === 'visamex?' || s === 'visamex') key = 'visaMEX';
+else if (s === 'visaadditionalinfo' || s === 'visanote') key = 'visaNote';
+else if (s === 'name' || s === 'promoter' || s === 'booker') key = 'name';
+else if (s === 'email' || s === 'contactemail' || s === 'emailaddress') key = 'email';
+else if (s === 'phone' || s === 'mobile' || s === 'mob' || s === 'tel' || s === 'contact#' || s === 'phone#' || s ===
+'phonenumber') key = 'phone';
+else if (s === 'openers' || s === 'support' || s === 'supportacts') key = 'openers';
+return obj[key] || "";
+});
+});
+
+sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
+return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
+}

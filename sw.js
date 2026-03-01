@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bcg-tour-v2';
+const CACHE_NAME = 'bcg-tour-v3';
 const urlsToCache = [
   './',
   './index.html',
@@ -11,7 +11,7 @@ const urlsToCache = [
   './icon-512.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'
+  'https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@900&display=swap'
 ];
 
 self.addEventListener('install', event => {
