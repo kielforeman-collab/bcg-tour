@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BCG Tour">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#18181b">
+    <link rel="manifest" href="manifest.json">
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icon-76.png">
+    <!-- Fallback icon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>BCG • 38 DATES LATER 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .punk {
+            font-family: 'Press Start 2P', system-ui;
+        }
+
+        .neon {
+            text-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444;
+        }
+
+        .card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .bottom-nav {
+            box-shadow: 0 -4px 20px -5px rgb(0 0 0 / 0.5);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em;
+        }
+
+        /* iOS safe area padding for bottom nav */
+        .bottom-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+</head>
+
+<body class="bg-zinc-950 text-zinc-100 min-h-screen pb-24">
+    <div class="max-w-md mx-auto">
+
+        <!-- HEADER -->
+        <header class="bg-black border-b-4 border-red-600 sticky top-0 z-50">
+            <div class="px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-red-600 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+                        🤘</div>
+                    <div>
+                        <h1 class="punk text-2xl font-bold tracking-tighter neon">BIG CITY GERMS</h1>
+                        <p class="text-red-500 text-[10px] -mt-1 tracking-[3px]">38 DATES LATER • 2026</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div id="countdown" class="font-mono text-lg font-bold text-lime-400"></div>
+                    <div class="text-[10px] text-zinc-500 -mt-1">NEXT SHOW</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- COUNTRY FILTER DROPDOWN (only on shows) -->
+        <div id="filterDropdown" class="px-5 py-3 bg-zinc-900 border-b border-zinc-800">
+            <select id="countryFilter" onchange="filterBy(this.value)"
+                class="w-full bg-zinc-900 border border-zinc-700 focus:border-red-600 text-white rounded-3xl px-6 py-4 text-base focus:outline-none">
+                <option value="all">🌍 ALL DATES</option>
+                <option value="Japan">🇯🇵 JAPAN</option>
+                <option value="Taiwan">🇹🇼 TAIWAN</option>
+                <option value="Hong Kong">🇭🇰 HONG KONG</option>
+                <option value="Mongolia">🇲🇳 MONGOLIA</option>
+                <option value="China">🇨🇳 CHINA</option>
+                <option value="Indonesia">🇮🇩 INDONESIA</option>
+                <option value="Cambodia">🇰🇭 CAMBODIA</option>
+                <option value="Thailand">🇹🇭 THAILAND</option>
+                <option value="Nepal">🇳🇵 NEPAL</option>
+                <option value="India">🇮🇳 INDIA</option>
+                <option value="UAE">🇦🇪 UAE</option>
+                <option value="Iraq">�🇶 IRAQ</option>
+                <option value="Lebanon">🇱🇧 LEBANON</option>
+                <option value="Syria">🇸🇾 SYRIA</option>
+                <option value="Georgia">🇬🇪 GEORGIA</option>
+                <option value="Armenia">🇦🇲 ARMENIA</option>
+                <option value="Turkey">🇹🇷 TURKEY</option>
+            </select>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="px-5 pt-5 pb-4">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-5 top-4 text-zinc-500"></i>
+                <input id="searchInput" onkeyup="if(event.key==='Enter') searchShows()" type="text"
+                    placeholder="Search city, venue..."
+                    class="w-full bg-zinc-900 border border-zinc-700 focus:border-red-600 rounded-3xl pl-12 py-4 text-base focus:outline-none">
+            </div>
+        </div>
+
+        <!-- SHOWS VIEW -->
+        <div id="showsView" class="px-5 space-y-5 pb-8"></div>
+
+        <!-- FLIGHTS VIEW -->
+        <div id="flightsView" class="hidden px-5 py-5 space-y-4">
+
+            <!-- FINDER CARD -->
+            <div class="bg-zinc-900 rounded-3xl p-5">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 uppercase tracking-widest text-zinc-300">
+                    <i class="fa-solid fa-magnifying-glass-location text-red-500"></i> Flight Finder
+                </h2>
+
+                <!-- FROM / SWAP / TO -->
+                <div class="relative flex flex-col gap-3 mb-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">From</label>
+                        <select id="fromCity" onchange="updateTourLegs()"
+                            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-4 py-3 text-sm focus:outline-none font-mono"></select>
+                    </div>
+
+                    <!-- SWAP button -->
+                    <button onclick="swapCities()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-zinc-700 hover:bg-red-600 active:scale-90 rounded-full flex items-center justify-center text-white transition-all z-10"
+                        title="Swap cities">
+                        <i class="fa-solid fa-arrow-right-arrow-left text-xs rotate-90"></i>
+                    </button>
+
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">To</label>
+                        <select id="toCity" onchange="updateTourLegs()"
+                            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-4 py-3 text-sm focus:outline-none font-mono"></select>
+                    </div>
+                </div>
+
+                <!-- DATE + PASSENGERS -->
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">Date</label>
+                        <input type="date" id="flightDate" value="2026-03-04"
+                            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-3 py-3 text-sm focus:outline-none">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">Passengers</label>
+                        <select id="paxCount"
+                            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-3 py-3 text-sm focus:outline-none">
+                            <option value="1">1 pax</option>
+                            <option value="2">2 pax</option>
+                            <option value="3" selected>3 pax (band)</option>
+                            <option value="4">4 pax</option>
+                            <option value="5">5 pax</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SEARCH ENGINES -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="searchGoogle()"
+                        class="col-span-2 bg-white hover:bg-lime-300 active:bg-lime-400 text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-brands fa-google text-base"></i> Google Flights
+                    </button>
+                    <button onclick="searchSkyscanner()"
+                        class="bg-[#0770e3] hover:bg-blue-500 active:bg-blue-700 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-plane text-xs"></i> Skyscanner
+                    </button>
+                    <button onclick="searchKiwi()"
+                        class="bg-[#00b2a9] hover:bg-teal-400 active:bg-teal-600 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-kiwi-bird text-xs"></i> Kiwi.com
+                    </button>
+                    <button onclick="searchKayak()"
+                        class="bg-[#f05537] hover:bg-orange-400 active:bg-orange-600 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-anchor text-xs"></i> Kayak
+                    </button>
+                    <button onclick="searchMomondo()"
+                        class="bg-[#7539cc] hover:bg-purple-500 active:bg-purple-700 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Momondo
+                    </button>
+                </div>
+            </div>
+
+            <!-- TOUR LEGS -->
+            <div class="bg-zinc-900 rounded-3xl p-5">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 uppercase tracking-widest text-zinc-300">
+                    <i class="fa-solid fa-route text-red-500"></i> Tour Legs
+                </h2>
+                <p class="text-[10px] text-zinc-600 uppercase tracking-widest mb-4">Tap a leg to pre-fill</p>
+                <div id="tourLegsContainer" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- SETTINGS VIEW -->
+        <div id="settingsView" class="hidden px-5 py-5 space-y-4">
+
+            <!-- GOOGLE SHEET SYNC -->
+            <div class="bg-zinc-900 rounded-3xl p-5">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 uppercase tracking-widest text-zinc-300">
+                    <i class="fa-solid fa-cloud-arrow-down text-red-500"></i> Google Sheet Sync
+                </h2>
+                <p class="text-[10px] text-zinc-600 uppercase tracking-widest mb-4">Publish your sheet as CSV, paste the
+                    URL below</p>
+
+                <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">Read URL
+                    (CSV)</label>
+                <textarea id="sheetUrl" rows="2" inputmode="url" autocomplete="off"
+                    placeholder="Paste your Google Sheet CSV URL here"
+                    class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-4 py-3 text-xs font-mono focus:outline-none mb-3 resize-none leading-relaxed"></textarea>
+
+                <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1 pl-1">Write URL (Apps
+                    Script)</label>
+                <textarea id="sheetWriteUrl" rows="2" inputmode="url" autocomplete="off"
+                    placeholder="Paste your Apps Script Web App URL here"
+                    class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-500 rounded-2xl px-4 py-3 text-xs font-mono focus:outline-none mb-3 resize-none leading-relaxed"></textarea>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="syncSheet()"
+                        class="bg-red-600 hover:bg-red-500 active:bg-red-700 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-rotate-right"></i> Sync
+                    </button>
+                    <button onclick="pushToSheet()"
+                        class="bg-amber-600 hover:bg-amber-500 active:bg-amber-700 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Push
+                    </button>
+                </div>
+
+                <div id="syncStatus" class="mt-3 text-xs text-zinc-500 text-center min-h-[1.2rem]"></div>
+            </div>
+
+            <!-- DATA MANAGEMENT -->
+            <div class="bg-zinc-900 rounded-3xl p-5">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 uppercase tracking-widest text-zinc-300">
+                    <i class="fa-solid fa-database text-red-500"></i> Data
+                </h2>
+                <p class="text-[10px] text-zinc-600 uppercase tracking-widest mb-4">Manage locally-stored tour data</p>
+
+                <div id="dataStatus" class="bg-zinc-800 rounded-2xl px-4 py-3 mb-3 text-xs text-zinc-400"></div>
+
+                <button onclick="resetData()"
+                    class="w-full bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-800 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm transition-colors">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Defaults
+                </button>
+            </div>
+
+            <!-- HOW TO -->
+            <div class="bg-zinc-900 rounded-3xl p-5 text-xs text-zinc-500 space-y-2 leading-relaxed">
+                <div class="text-[10px] uppercase tracking-widest text-zinc-600 mb-3">How to link a Google Sheet</div>
+                <div>1. Open your Google Sheet</div>
+                <div>2. <span class="text-zinc-400">File → Share → Publish to web</span></div>
+                <div>3. Choose your tab, set format to <span class="text-zinc-400">CSV</span>, click Publish</div>
+                <div>4. Copy the URL and paste it above</div>
+                <div class="pt-2 text-zinc-600">Expected column headers: id, date, dow, city, airport, country, venue,
+                    deal, contact, flight, hotel, visaCDN, visaMEX, visaNote, notes, openers, schedule, address</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-zinc-900 border-t border-zinc-800 z-50 bottom-nav">
+        <div class="flex text-sm">
+            <button onclick="switchTab('shows')" id="bottom-shows"
+                class="flex-1 py-4 font-bold text-red-500 border-t-4 border-red-600 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-list"></i> SHOWS
+            </button>
+            <button onclick="switchTab('flights')" id="bottom-flights"
+                class="flex-1 py-4 font-bold text-zinc-400 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plane"></i> FLIGHTS
+            </button>
+            <button onclick="switchTab('settings')" id="bottom-settings"
+                class="flex-1 py-4 font-bold text-zinc-400 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gear"></i> SETTINGS
+            </button>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/95 flex items-end justify-center z-[100] pb-4">
+        <div class="bg-zinc-900 w-full max-w-md rounded-t-3xl overflow-hidden modal max-h-[90vh] overflow-y-auto">
+            <div
+                class="sticky top-0 bg-zinc-900 px-6 py-4 border-b border-zinc-800 flex items-center justify-between z-10">
+                <div id="modalDate" class="font-mono text-red-500"></div>
+                <div class="flex items-center gap-3">
+                    <button id="editBtn" onclick="toggleEdit()"
+                        class="text-zinc-500 hover:text-amber-400 active:scale-90 transition-colors text-lg"
+                        title="Edit show">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button onclick="closeModal()"
+                        class="text-4xl leading-none text-zinc-500 hover:text-white active:scale-90">×</button>
+                </div>
+            </div>
+            <div class="p-6" id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Default sync URL (pre-filled in Settings)
+        const DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlftn-2fPVpc-hrddDbFbrV36Jdliy6msnvdsmbxpSm_LawqvyC5BjT6eITZUo9DI39xud_tQwP9L3/pub?gid=0&single=true&output=csv';
+
+        const tourData = [
+            { id: 1, date: "2026-03-04", city: "Tokyo", airport: "NRT", country: "Japan", venue: "Antiknock", name: "Baba", deal: "TESTEST", openers: "venue provides", schedule: "SCHD TST", email: "ANTIKNOCK <info@antiknock.net>", phone: "111-222-3333", flight: "March 2nd: YVR-NRT 9:35 ZG021 $650 (AC)", status: "TEST", hotel: "Agoda: Hotel&Co. Sagami", visaCDN: "Visa-Free", visaMEX: "Visa-Free", visaNote: "VISA Additional Info TST" },
+            { id: 2, date: "2026-03-05", city: "Mito", airport: "NRT", country: "Japan", venue: "Sonic", name: "Otsu", deal: "Venue provides", hotel: "Agoda: Mito Daiichi Hotel" },
+            { id: 3, date: "2026-03-06", city: "Tokyo", airport: "NRT", country: "Japan", venue: "GODZ", deal: "Venue provides", email: "IG", hotel: "We book" },
+            { id: 4, date: "2026-03-07", city: "Niigata", airport: "KIJ", country: "Japan", venue: "Woodys", deal: "Venue provides", hotel: "We book" },
+            { id: 5, date: "2026-03-08", city: "Osaka", airport: "KIX", country: "Japan", venue: "Sengoku Daitouryo", deal: "Venue provides", email: "IG", hotel: "We book" },
+            { id: 6, date: "2026-03-09", city: "", airport: "KIX", country: "Japan", hotel: "We book" },
+            { id: 7, date: "2026-03-10", city: "", airport: "KIX", country: "Japan", hotel: "We book" },
+            { id: 8, date: "2026-03-11", city: "", airport: "KIX", country: "Japan", hotel: "We book" },
+            { id: 9, date: "2026-03-12", city: "Fukuoka", airport: "FUK", country: "Japan", venue: "Utero", email: "IG", hotel: "We book" },
+            { id: 10, date: "2026-03-13", city: "", airport: "FUK", country: "Japan", flight: "FUK-OKA 13:55 ANA1211 ($92) 888137862", status: "Booked", hotel: "We book" },
+            { id: 11, date: "2026-03-14", city: "Okinawa", airport: "OKA", country: "Japan", venue: "Remy's", name: "Remy", deal: "Venue provides", email: "IG", hotel: "We book", visaCDN: "Visa-Free", visaMEX: "Visa Required", visaNote: "(acquired)" },
+            { id: 12, date: "2026-03-15", city: "Kaohsiung", airport: "KHH", country: "Taiwan", venue: "Paramount", deal: "50% of door", openers: "Youth Tear Bomb, Hehehaha", flight: "OKA-KHH 11:50 SL0391 ($223)", status: "Booked", hotel: "We book" },
+            { id: 13, date: "2026-03-16", city: "Hengchun", airport: "HCN", country: "Taiwan", venue: "Shore Bar", hotel: "Apt. above venue" },
+            { id: 14, date: "2026-03-17", city: "", airport: "HCN", country: "Taiwan", hotel: "Apt. above venue" },
+            { id: 15, date: "2026-03-18", city: "Taichung", airport: "RMQ", country: "Taiwan", venue: "Sound Live House", deal: "door split after 10th ticket", openers: "Venue provides", hotel: "We book" },
+            { id: 16, date: "2026-03-19", city: "Taipei", airport: "TPE", country: "Taiwan", venue: "Revolver", name: "Dan", deal: "40% of door", openers: "Greasy Alley (TBC), Toxic Bald (TBC)", schedule: "SC: 5pm, D: 730, S: 8pm", phone: "(886) 910911907", hotel: "We book" },
+            { id: 17, date: "2026-03-20", city: "Hong Kong", airport: "HKG", country: "Hong Kong", venue: "Aftermath", deal: "Venue provides", flight: "TPE-HKG 11:50 HX253 ($134)", status: "F4V9HV", hotel: "We book", visaCDN: "Visa-Free", visaMEX: "Visa-Free" },
+            { id: 18, date: "2026-03-21", city: "Ulaanbaatar", airport: "UBN", country: "Mongolia", venue: "Republik", name: "Tugsuo", email: "FB", flight: "HKG-UBN ($340)", status: "EOSB4C", hotel: "Venue provides", visaCDN: "Visa-Free", visaMEX: "E-Visa", visaNote: "https://evisa.mn/en" },
+            { id: 19, date: "2026-03-22", city: "", airport: "UBN", country: "Mongolia", hotel: "Venue provides" },
+            { id: 20, date: "2026-03-23", city: "", airport: "UBN", country: "Mongolia", flight: "UBN-PEK 18:55 MR801 ($220)", status: "DQ2TYQ", hotel: "We book" },
+            { id: 21, date: "2026-03-24", city: "Beijing", airport: "PEK", country: "China", venue: "Shut Up Live", name: "Donatella", deal: "Bar split", openers: "venue find", address: "75 Wudaoying Hutong", hotel: "We book", visaCDN: "Visa-free", visaMEX: "Visa Required", visaNote: "(acquired)" },
+            { id: 22, date: "2026-03-25", city: "Zhengzhou", airport: "CGO", country: "China", venue: "7LiveHouse", hotel: "We book" },
+            { id: 23, date: "2026-03-26", city: "Wuhan", airport: "WUH", country: "China", venue: "M&Ms", hotel: "We book" },
+            { id: 24, date: "2026-03-27", city: "Chengdu", airport: "CTU", country: "China", venue: "Jah Bar", deal: "100% of door", hotel: "We book" },
+            { id: 25, date: "2026-03-28", city: "Chongqing", airport: "CKG", country: "China", venue: "PUNK FEST", name: "Chenfu", deal: "3000 RMB + Hotel", hotel: "Venue provides" },
+            { id: 26, date: "2026-03-29", city: "", airport: "CKG", country: "China", deal: "Hotel by CQPF", hotel: "Venue provides" },
+            { id: 27, date: "2026-03-30", city: "Indonesia", airport: "CGK", country: "Indonesia", deal: "Stay at Gaus'", flight: "CKG-CGK 11:00 MF8673 ($680)", hotel: "Gaus' House", visaCDN: "Visa on Arrival", visaMEX: "Visa on Arrival" },
+            { id: 28, date: "2026-03-31", city: "Cianjur", airport: "CGK", country: "Indonesia", venue: "JMC", deal: "Stay at Gaus'", hotel: "Gaus' House" },
+            { id: 29, date: "2026-04-01", city: "Bogor", airport: "CGK", country: "Indonesia", venue: "Prigel Cafe", deal: "Stay at Gaus'", hotel: "Gaus' House" },
+            { id: 30, date: "2026-04-02", city: "Jakarta", airport: "CGK", country: "Indonesia", deal: "Stay at Gaus'", email: "Kristoff's bday", hotel: "Gaus' House" },
+            { id: 31, date: "2026-04-03", city: "Phnom Penh", airport: "KTI", country: "Cambodia", venue: "Cloud", deal: "free accom", openers: "Venue provide", email: "Sophie's bday", flight: "CGK-KTI 11:35 ($158) QZ474", status: "XJCLUH", hotel: "Venue provides", visaCDN: "Visa on Arrival", visaMEX: "Visa on Arrival" },
+            { id: 32, date: "2026-04-04", city: "Bangkok", airport: "DMK", country: "Thailand", venue: "Immortal", name: "Lakfah", openers: "Strangle", email: "FB", flight: "KTI-DMK 9:45 ($146) FD609", status: "PY348C", hotel: "We book", visaCDN: "Visa Free", visaMEX: "Visa Free" },
+            { id: 33, date: "2026-04-05", city: "", airport: "DMK", country: "Thailand", hotel: "We book" },
+            { id: 34, date: "2026-04-06", city: "", airport: "DMK", country: "Thailand", hotel: "We book" },
+            { id: 35, date: "2026-04-07", city: "", airport: "DMK", country: "Thailand", flight: "DMK-KTM 11:10 SL220 ($197)", status: "ORHRKH", notes: "Flight changed to next day?", visaCDN: "Visa on Arrival", visaMEX: "Visa on Arrival" },
+            { id: 36, date: "2026-04-08", city: "", airport: "KTM", country: "Nepal" },
+            { id: 37, date: "2026-04-09", city: "Kathmandu", airport: "KTM", country: "Nepal", venue: "Beers n Cheers", name: "Ritavrat", openers: "Strangle" },
+            { id: 38, date: "2026-04-10", city: "Delhi", airport: "DEL", country: "India", venue: "The Piano Man", name: "Arjun", deal: "free accom, 70%", openers: "Venue provides 1", schedule: "Need E-Business visa, venue will provide letter of invitation", flight: "KTM-DEL 6:30 AI0224 ($118)", status: "YZJUGF", hotel: "Venue provide", notes: "Fight changed to 6:45am", visaCDN: "E-Visa", visaMEX: "E-Visa", visaNote: "https://indianvisaonline.gov.in/visa/tvoa.html" },
+            { id: 39, date: "2026-04-11", city: "Bangalore", airport: "BLR", country: "India", venue: "Fandom", flight: "DEL-BLR 9:30-12:25 AI2415 ($99)", status: "FR1LNQ", hotel: "We book" },
+            { id: 40, date: "2026-04-12", city: "Mumbai", airport: "BOM", country: "India", flight: "BLR-BOM 11:25 6E 5011 ($90)", status: "OD7HPK", hotel: "We book" },
+            { id: 41, date: "2026-04-13", city: "", airport: "BOM", country: "India", hotel: "We book" },
+            { id: 42, date: "2026-04-14", city: "", airport: "BOM", country: "India", flight: "BOM-DXB 14:55 6E 1453 ($228)", status: "SBEE5A", hotel: "We book", visaCDN: "Visa Free", visaMEX: "Visa Free" },
+            { id: 43, date: "2026-04-15", city: "Dubai", airport: "DXB", country: "UAE", venue: "Jimmy Dix", hotel: "We book" },
+            { id: 44, date: "2026-04-16", city: "", airport: "DXB", country: "UAE", flight: "SHJ-ERB 9:40 G9357 ($320)", status: "6HTCX6", hotel: "Venue provide", visaCDN: "E-Visa", visaMEX: "E-Visa", visaNote: "https://visit.gov.krd/" },
+            { id: 45, date: "2026-04-17", city: "Erbil", airport: "EBL", country: "Iraq", hotel: "Venue provide" },
+            { id: 46, date: "2026-04-18", city: "Beirut", airport: "BEY", country: "Lebanon", venue: "Zico House", flight: "ERB-BEY 15:15-17:05 ME0325 ($191)", status: "C2TXUL", hotel: "Venue provide", visaCDN: "Visa-Free", visaMEX: "Visa-Free" },
+            { id: 47, date: "2026-04-19", city: "Damascus", airport: "DAM", country: "Syria", venue: "Floyd Pub", flight: "BUS to Damascus", visaCDN: "E-Visa", visaMEX: "E-Visa", visaNote: "https://evisa.sy/" },
+            { id: 48, date: "2026-04-20", city: "", airport: "DAM", country: "Syria" },
+            { id: 49, date: "2026-04-21", city: "", airport: "DAM", country: "Syria", flight: "BUS to Beirut" },
+            { id: 50, date: "2026-04-22", city: "", airport: "BEY", country: "Lebanon", flight: "BEY-AYT-TBS 20:45-22:10/3:40-6:45 PC1825,PC1840 ($233)", status: "1ZPHZD/1ZPHUW", notes: "SELF TRANSFER, COLLECT BAGS", visaCDN: "Visa-Free", visaMEX: "Turkiye: E-Visa (free)", visaNote: "https://dtvgroup.com.tr/" },
+            { id: 51, date: "2026-04-23", city: "Kutaisi", airport: "KUT", country: "Georgia", venue: "Riff Raff", flight: "Rent car at TBS", hotel: "Venue provide", visaCDN: "Visa-Free", visaMEX: "Visa-Free" },
+            { id: 52, date: "2026-04-24", city: "Tbilisi", airport: "TBS", country: "Georgia", venue: "Revolution", flight: "Bus Kutaisi–Tbilisi" },
+            { id: 53, date: "2026-04-25", city: "Yerevan", airport: "EVN", country: "Armenia", venue: "Muha Punk Bar", email: "IG", flight: "Bus Tbilisi–Yerevan ($42)", hotel: "We book", visaCDN: "E-Visa", visaMEX: "E-Visa", visaNote: "https://evisa.mfa.am/" },
+            { id: 54, date: "2026-04-26", city: "Istanbul", airport: "SAW", country: "Turkey", venue: "Dorock", flight: "EVN-SAW 6:30-8:00 PC551 ($149)", status: "1ZPHR6", hotel: "We book", visaCDN: "Visa-Free", visaMEX: "Turkiye: E-Visa (free)" },
+        ];
+
+        // Format YYYY-MM-DD → friendly string e.g. "Wed, Mar 4"
+        function fmtDate(d) {
+            if (!d) return '';
+            try {
+                const dt = new Date(d + 'T12:00:00'); // noon to avoid timezone shifts
+                return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            } catch (e) { return d; }
+        }
+
+        function renderShows(data) {
+            const container = document.getElementById('showsView');
+            container.innerHTML = '';
+            data.forEach(show => {
+                const div = document.createElement('div');
+                div.className = `card bg-zinc-900 border border-zinc-800 rounded-3xl p-7 cursor-pointer active:scale-[0.98]`;
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="font-mono text-red-500 text-sm">${fmtDate(show.date)}</div>
+                            <div class="text-2xl font-bold mt-1 leading-none">${show.city}</div>
+                            <div class="text-red-400 mt-1">${show.venue || 'Travel / Off day'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="inline-block bg-zinc-800 text-[10px] px-3 py-1 rounded-2xl">${show.country}</div>
+                        </div>
+                    </div>
+                    ${show.deal ? `<div class="mt-4 text-xs uppercase tracking-widest text-lime-400">${show.deal}</div>` : ''}
+                `;
+                div.onclick = () => showDetail(show);
+                container.appendChild(div);
+            });
+        }
+
+        function showDetail(show) {
+            currentShow = show;
+            isEditing = false;
+            const editBtn = document.getElementById('editBtn');
+            if (editBtn) { editBtn.querySelector('i').className = 'fa-solid fa-pen-to-square'; editBtn.title = 'Edit show'; }
+            const content = document.getElementById('modalContent');
+
+            // HTML-escape user values
+            const esc = v => String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Always-visible info row — safe string concat, no nested backticks
+            function infoRow(label, value, valCls) {
+                var cls = value ? (valCls || 'text-zinc-300') : 'text-zinc-700';
+                return '<div class="flex items-start justify-between gap-4 px-4 py-3">'
+                    + '<span class="text-[10px] uppercase tracking-widest text-zinc-600 shrink-0 pt-0.5">' + label + '</span>'
+                    + '<span class="text-sm text-right ' + cls + '">' + (value ? esc(value) : '\u2014') + '</span>'
+                    + '</div>';
+            }
+
+            // Visa badge — safe, no nested backticks
+            function visaBadge(value) {
+                if (!value) return '<span class="text-xs text-zinc-700">\u2014</span>';
+                var bg = /free/i.test(value) ? 'bg-lime-600' : 'bg-yellow-600';
+                return '<span class="text-xs font-bold px-3 py-1 rounded-full ' + bg + ' text-black">' + esc(value) + '</span>';
+            }
+
+            // ── header ──
+            var html = '<div class="text-center mb-7">'
+                + '<div class="font-mono text-3xl font-bold text-white mb-1">' + fmtDate(show.date) + '</div>'
+                + (show.city ? '<div class="text-red-400 text-lg font-semibold">' + esc(show.city) + '</div>' : '')
+                + '<div class="text-zinc-600 text-xs mt-1">' + esc(show.country) + ' \u00b7 ' + esc(show.airport) + '</div>'
+                + '</div>';
+
+            // ── venue ──
+            html += '<div class="bg-zinc-800/60 rounded-2xl p-5 mb-5">'
+                + '<div class="uppercase text-[10px] tracking-widest text-zinc-500 mb-1">Venue</div>'
+                + '<div class="text-xl font-semibold ' + (show.venue ? '' : 'text-zinc-600') + '">' + (show.venue ? esc(show.venue) : '\u2014') + '</div>'
+                + '<div class="text-sm text-zinc-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-red-500/50"></i>'
+                + (show.address ? esc(show.address) : '<span class="text-zinc-700">\u2014</span>') + '</div>'
+                + '</div>';
+
+            // ── show info table ──
+            html += '<div class="mb-5 rounded-2xl overflow-hidden border border-zinc-800 divide-y divide-zinc-800">'
+                + infoRow('Name', show.name)
+                + infoRow('Deal', show.deal, 'text-lime-400')
+                + infoRow('Openers', show.openers)
+                + infoRow('Schedule', show.schedule)
+                + infoRow('Email', show.email, 'text-zinc-200 font-mono')
+                + infoRow('Phone', show.phone, 'text-zinc-200 font-mono')
+                + '</div>';
+
+            // ── flight ──
+            html += '<div class="bg-amber-900/20 border border-amber-800/40 rounded-2xl p-5 mb-5">'
+                + '<div class="uppercase text-[10px] tracking-widest text-amber-400 mb-3"><i class="fa-solid fa-plane mr-1"></i>Flight</div>'
+                + '<div class="font-mono text-sm leading-relaxed ' + (show.flight ? '' : 'text-zinc-700') + '">' + (show.flight ? esc(show.flight) : '\u2014') + '</div>'
+                + (show.status ? '<div class="mt-2 text-[10px] uppercase tracking-widest text-zinc-500">Status</div><div class="font-mono text-xs text-amber-300">' + esc(show.status) + '</div>' : '')
+                + '</div>';
+
+            // ── hotel / notes ──
+            html += '<div class="mb-5 rounded-2xl overflow-hidden border border-zinc-800 divide-y divide-zinc-800">'
+                + infoRow('Hotel', show.hotel)
+                + infoRow('Notes', show.notes)
+                + '</div>';
+
+            // ── visa ──
+            var visaNoteHtml = '';
+            if (show.visaNote) {
+                var noteContent = /^https?:\/\//.test(show.visaNote)
+                    ? '<a href="' + show.visaNote + '" target="_blank" class="underline underline-offset-2">' + esc(show.visaNote) + '</a>'
+                    : esc(show.visaNote);
+                visaNoteHtml = '<div class="text-xs text-blue-300 mt-2">' + noteContent + '</div>';
+            }
+            html += '<div class="bg-blue-950/30 border border-blue-900/40 rounded-2xl p-4 mb-5">'
+                + '<div class="uppercase text-[10px] tracking-widest text-blue-400 mb-3"><i class="fa-solid fa-passport mr-1"></i>Visa Requirements</div>'
+                + '<div class="flex items-center justify-between py-2 border-b border-blue-900/30">'
+                + '<span class="text-xs text-zinc-500 uppercase tracking-widest">\ud83c\udde8\ud83c\udde6 CDN</span>'
+                + visaBadge(show.visaCDN)
+                + '</div>'
+                + '<div class="flex items-center justify-between py-2' + (show.visaNote ? ' border-b border-blue-900/30' : '') + '">'
+                + '<span class="text-xs text-zinc-500 uppercase tracking-widest">\ud83c\uddf2\ud83c\uddfd MEX</span>'
+                + visaBadge(show.visaMEX)
+                + '</div>'
+                + visaNoteHtml
+                + '</div>';
+
+            // ── flight search ──
+            var cityEsc = esc(show.city);
+            html += '<div class="mt-6 pt-6 border-t border-zinc-800">'
+                + '<div class="uppercase text-[10px] tracking-widest text-amber-400 mb-3 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Quick Flight Search</div>'
+                + '<div class="grid grid-cols-2 gap-2">'
+                + '<button onclick="quickFlightSearch(\'' + show.city + '\',\'' + show.date + '\',\'to\')" class="bg-amber-600 hover:bg-amber-500 active:bg-amber-700 py-4 rounded-2xl text-sm font-bold">\u2192 ' + cityEsc + '</button>'
+                + '<button onclick="quickFlightSearch(\'' + show.city + '\',\'' + show.date + '\',\'from\')" class="bg-amber-600 hover:bg-amber-500 active:bg-amber-700 py-4 rounded-2xl text-sm font-bold">From ' + cityEsc + '</button>'
+                + '</div></div>';
+            content.innerHTML = html;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function quickFlightSearch(city, date, dir) {
+            closeModal();
+            if (dir === 'from') {
+                document.getElementById('fromCity').value = city;
+            } else {
+                document.getElementById('toCity').value = city;
+            }
+            document.getElementById('flightDate').value = date;
+            switchTab('flights');
+        }
+
+        // Map city -> IATA airport code (first occurrence per city in tour)
+        const cityAirportMap = {};
+        tourData.forEach(s => { if (!cityAirportMap[s.city]) cityAirportMap[s.city] = s.airport; });
+
+        function getIATA(city) { return cityAirportMap[city] || city; }
+        function getPax() { return parseInt(document.getElementById('paxCount').value) || 3; }
+
+        function populateDropdowns() {
+            // Deduplicated city list in tour order (NOT alphabetical)
+            const seen = new Set(), cities = [];
+            tourData.forEach(s => { if (!seen.has(s.city)) { seen.add(s.city); cities.push(s.city); } });
+
+            const fromSelect = document.getElementById('fromCity');
+            const toSelect = document.getElementById('toCity');
+            fromSelect.innerHTML = toSelect.innerHTML = '';
+            cities.forEach(city => {
+                const code = cityAirportMap[city];
+                const label = `${city} (${code})`;
+                fromSelect.add(new Option(label, city));
+                toSelect.add(new Option(label, city));
+            });
+            // Default to first → second city
+            if (cities.length > 1) toSelect.value = cities[1];
+        }
+
+        function swapCities() {
+            const f = document.getElementById('fromCity');
+            const t = document.getElementById('toCity');
+            [f.value, t.value] = [t.value, f.value];
+        }
+
+        function searchGoogle() {
+            const from = getIATA(document.getElementById('fromCity').value);
+            const to = getIATA(document.getElementById('toCity').value);
+            const date = document.getElementById('flightDate').value;
+            const pax = getPax();
+            window.open(`https://www.google.com/travel/flights?q=Flights+from+${from}+to+${to}+on+${date}&adults=${pax}`, '_blank');
+        }
+
+        function searchSkyscanner() {
+            const from = getIATA(document.getElementById('fromCity').value).toLowerCase();
+            const to = getIATA(document.getElementById('toCity').value).toLowerCase();
+            const date = document.getElementById('flightDate').value.replace(/-/g, '').slice(2);
+            const pax = getPax();
+            window.open(`https://www.skyscanner.net/transport/flights/${from}/${to}/${date}/?adults=${pax}&currency=USD`, '_blank');
+        }
+
+        function searchKiwi() {
+            const from = getIATA(document.getElementById('fromCity').value);
+            const to = getIATA(document.getElementById('toCity').value);
+            const date = document.getElementById('flightDate').value;
+            const pax = getPax();
+            window.open(`https://www.kiwi.com/en/search/results/${from}-${to}/${date}/${date}?adults=${pax}&currency=USD`, '_blank');
+        }
+
+        function searchKayak() {
+            const from = getIATA(document.getElementById('fromCity').value);
+            const to = getIATA(document.getElementById('toCity').value);
+            const date = document.getElementById('flightDate').value;
+            const pax = getPax();
+            window.open(`https://www.kayak.com/flights/${from}-${to}/${date}/${pax}adults?sort=bestflight_a`, '_blank');
+        }
+
+        function searchMomondo() {
+            const from = getIATA(document.getElementById('fromCity').value);
+            const to = getIATA(document.getElementById('toCity').value);
+            const date = document.getElementById('flightDate').value;
+            const pax = getPax();
+            window.open(`https://www.momondo.com/flight-search/${from}-${to}/${date}//${pax}adults?currency=USD`, '_blank');
+        }
+
+        // Build consecutive tour legs (whenever the airport changes)
+        function buildTourLegs() {
+            const legs = [];
+            for (let i = 0; i < liveData.length - 1; i++) {
+                const a = liveData[i], b = liveData[i + 1];
+                if (a.airport !== b.airport) {
+                    const info = b.flight || (b.notes && /[A-Z]{2,3}\d{3,4}/.test(b.notes) ? b.notes : null);
+                    const booked = !!(b.flight && /booked/i.test(b.flight)) ||
+                        !!(b.notes && /booked/i.test(b.notes));
+                    legs.push({
+                        fromCity: a.city, fromCode: a.airport,
+                        toCity: b.city, toCode: b.airport,
+                        date: b.date, booked, info
+                    });
+                }
+            }
+            return legs;
+        }
+
+        function renderTourLegs() {
+            const legs = buildTourLegs();
+            const container = document.getElementById('tourLegsContainer');
+            container.innerHTML = legs.map((leg, i) => `
+                <button onclick="fillLeg(${i})" class="w-full text-left bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-600 rounded-2xl px-4 py-3 transition-colors">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <div class="font-mono text-sm text-zinc-300">${leg.fromCode} <span class="text-zinc-600">→</span> ${leg.toCode}</div>
+                        ${leg.booked ? '<span class="text-[9px] bg-lime-600 text-black font-bold px-2 py-0.5 rounded-full uppercase">✓ Booked</span>' : '<span class="text-[9px] text-zinc-600 border border-zinc-700 px-2 py-0.5 rounded-full uppercase">Search</span>'}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-zinc-500">${leg.fromCity} → ${leg.toCity}</span>
+                        <span class="text-[10px] font-mono text-zinc-600">${leg.date.slice(5)}</span>
+                    </div>
+                    ${leg.info ? `<div class="text-[10px] text-amber-400/70 mt-1 truncate">${leg.info}</div>` : ''}
+                </button>`).join('');
+        }
+
+        function fillLeg(i) {
+            const leg = buildTourLegs()[i];
+            if (!leg) return;
+            document.getElementById('fromCity').value = leg.fromCity;
+            document.getElementById('toCity').value = leg.toCity;
+            document.getElementById('flightDate').value = leg.date;
+            document.getElementById('flightsView').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateTourLegs() { /* hooks into swap/fill if needed */ }
+
+        // ─── DATA LAYER ──────────────────────────────────────────────────────────
+        const LS_DATA = 'bcg_tourData';
+        const LS_URL = 'bcg_sheetUrl';
+        const LS_WRITE_URL = 'bcg_writeUrl';
+        const LS_SYNCED = 'bcg_lastSynced';
+        let liveData = [];   // runtime data array (localStorage > hardcoded)
+
+        // Version key — bump suffix to force a one-time cache purge
+        const LS_VER = 'bcg_dataVer';
+        const DATA_VER = `${tourData.length}:${tourData[tourData.length - 1].date}:r7`;
+
+        function loadData() {
+            try {
+                const storedVer = localStorage.getItem(LS_VER);
+                const stored = localStorage.getItem(LS_DATA);
+                const storedUrl = localStorage.getItem(LS_URL);
+                const storedWriteUrl = localStorage.getItem(LS_WRITE_URL);
+                if (storedUrl) document.getElementById('sheetUrl').value = storedUrl;
+                if (storedWriteUrl) document.getElementById('sheetWriteUrl').value = storedWriteUrl;
+
+                if (stored && storedVer === DATA_VER) {
+                    liveData = JSON.parse(stored);
+                } else {
+                    // Wipe ALL bcg_ keys to remove any stale / corrupt data
+                    Object.keys(localStorage)
+                        .filter(k => k.startsWith('bcg_'))
+                        .forEach(k => localStorage.removeItem(k));
+                    liveData = [...tourData];
+                    localStorage.setItem(LS_VER, DATA_VER);
+                }
+            } catch (e) {
+                liveData = [...tourData];
+            }
+        }
+
+        function saveData(arr) {
+            liveData = arr;
+            localStorage.setItem(LS_DATA, JSON.stringify(arr));
+            localStorage.setItem(LS_VER, DATA_VER);   // stamp version so reload keeps synced data
+            renderShows(liveData);
+            populateDropdowns();
+            renderTourLegs();
+            filterBy(document.getElementById('countryFilter').value);
+        }
+
+        function resetData() {
+            if (!confirm('Reset to hardcoded defaults? All edits and synced data will be lost.')) return;
+            localStorage.removeItem(LS_DATA);
+            localStorage.removeItem(LS_SYNCED);
+            loadData();
+            renderShows(liveData);
+            populateDropdowns();
+            renderTourLegs();
+            updateDataStatus();
+            document.getElementById('syncStatus').textContent = '';
+        }
+
+        function updateDataStatus() {
+            const stored = !!localStorage.getItem(LS_DATA);
+            const synced = localStorage.getItem(LS_SYNCED);
+            const el = document.getElementById('dataStatus');
+            if (!el) return;
+            el.innerHTML = [
+                `<span class="text-zinc-500">Source:</span> ${stored ? '<span class="text-lime-400">localStorage</span>' : '<span class="text-zinc-400">hardcoded defaults</span>'}`,
+                `<span class="text-zinc-500">Shows:</span> ${liveData.length}`,
+                synced ? `<span class="text-zinc-500">Last synced:</span> ${synced}` : ''
+            ].filter(Boolean).join(' &nbsp;·&nbsp; ');
+        }
+
+        // ─── CSV PARSER ──────────────────────────────────────────────────────────
+
+        function parseCSV(text) {
+            const rows = [];
+            const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const cells = [];
+                let i = 0;
+                while (i < line.length) {
+                    if (line[i] === '"') {
+                        let j = i + 1, val = '';
+                        while (j < line.length) {
+                            if (line[j] === '"' && line[j + 1] === '"') { val += '"'; j += 2; }
+                            else if (line[j] === '"') { j++; break; }
+                            else { val += line[j++]; }
+                        }
+                        cells.push(val);
+                        if (line[j] === ',') j++;
+                        i = j;
+                    } else {
+                        let j = i;
+                        while (j < line.length && line[j] !== ',') j++;
+                        cells.push(line.slice(i, j));
+                        i = j + 1;
+                    }
+                }
+                if (line.endsWith(',')) cells.push('');
+                rows.push(cells);
+            }
+            if (rows.length < 2) return [];
+
+            // Normalise header names → internal field keys
+            const headerMap = h => {
+                const s = h.replace(/\s+/g, '').toLowerCase();
+                if (s === 'visacdn?' || s === 'visacdn') return 'visaCDN';
+                if (s === 'visamex?' || s === 'visamex') return 'visaMEX';
+                if (s === 'visaadditionalinfo' || s === 'visanote') return 'visaNote';
+                if (s === 'name' || s === 'promoter' || s === 'booker') return 'name';
+                if (s === 'email' || s === 'contactemail' || s === 'emailaddress') return 'email';
+                if (s === 'phone' || s === 'mobile' || s === 'mob' || s === 'tel' || s === 'contact#' || s === 'phone#' || s === 'phonenumber') return 'phone';
+                if (s === 'openers' || s === 'support' || s === 'supportacts') return 'openers';
+                return s;
+            };
+
+            const headers = rows[0].map(headerMap);
+
+            return rows.slice(1).filter(r => r.some(c => c.trim())).map((r, idx) => {
+                const obj = { id: idx + 1 };
+                headers.forEach((key, i) => { obj[key] = (r[i] || '').trim(); });
+
+                // Normalise date to YYYY-MM-DD
+                if (obj.date && obj.date.includes('/')) {
+                    const [m, d, y] = obj.date.split('/').map(Number);
+                    obj.date = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                }
+
+                // Strip empty string fields
+                Object.keys(obj).forEach(k => { if (obj[k] === '') delete obj[k]; });
+                return obj;
+            }).filter(o => o.date);
+        }
+
+        // ─── GOOGLE SHEET SYNC ────────────────────────────────────────────────────
+        async function syncSheet() {
+            const urlInput = document.getElementById('sheetUrl');
+            const statusEl = document.getElementById('syncStatus');
+            const url = urlInput.value.trim();
+            if (!url) { statusEl.textContent = '⚠️  Paste a CSV URL first'; return; }
+
+            localStorage.setItem(LS_URL, url);
+            statusEl.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i>  Syncing…';
+
+            // Try fetching via multiple strategies (CORS proxy needed for file:// origins)
+            const attempts = [
+                { label: 'direct', fetch: () => fetch(url) },
+                { label: 'corsproxy.io', fetch: () => fetch('https://corsproxy.io/?' + encodeURIComponent(url)) },
+                { label: 'allorigins', fetch: () => fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url)) },
+            ];
+
+            let text = null;
+            let lastErr = '';
+            for (const attempt of attempts) {
+                try {
+                    statusEl.innerHTML = `<i class="fa-solid fa-rotate fa-spin"></i>  Trying ${attempt.label}…`;
+                    const res = await attempt.fetch();
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    text = await res.text();
+                    break; // success
+                } catch (e) {
+                    lastErr = e.message;
+                }
+            }
+
+            if (!text) {
+                statusEl.innerHTML = `<span class="text-red-400">✗ Failed to fetch — ${lastErr}<br><span class="text-zinc-500">Make sure the sheet is published as CSV (File → Share → Publish to web)</span></span>`;
+                return;
+            }
+
+            try {
+                const parsed = parseCSV(text);
+                if (!parsed.length) throw new Error('No rows found — check that column headers match and sheet is published');
+                const ts = new Date().toLocaleTimeString();
+                localStorage.setItem(LS_SYNCED, ts);
+                saveData(parsed);
+                updateDataStatus();
+                statusEl.innerHTML = `<span class="text-lime-400">✓ Synced ${parsed.length} shows — ${ts}</span>`;
+            } catch (e) {
+                statusEl.innerHTML = `<span class="text-red-400">✗ Parse error: ${e.message}</span>`;
+            }
+        }
+
+        async function pushToSheet() {
+            const statusEl = document.getElementById('syncStatus');
+            const writeUrl = document.getElementById('sheetWriteUrl').value.trim();
+            if (!writeUrl) {
+                statusEl.innerHTML = '⚠️  Paste a Write URL first (from Apps Script)';
+                switchTab('settings');
+                return;
+            }
+            localStorage.setItem(LS_WRITE_URL, writeUrl);
+
+            statusEl.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-spin"></i>  Pushing to sheet…';
+            try {
+                const res = await fetch(writeUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // Apps Script requires no-cors for simple POST or it fails preflight
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(liveData)
+                });
+                // Note: With no-cors, we can't read the response body or status, 
+                // but we assume success if it doesn't throw.
+                const ts = new Date().toLocaleTimeString();
+                statusEl.innerHTML = `<span class="text-amber-400">✓ Pushed to sheet — ${ts}</span>`;
+            } catch (e) {
+                statusEl.innerHTML = `<span class="text-red-400">✗ Push failed: ${e.message}</span>`;
+            }
+        }
+
+        // ─── EDIT MODE ────────────────────────────────────────────────────────────
+        let currentShow = null;   // the show object currently in the modal
+        let isEditing = false;
+
+        function toggleEdit() {
+            isEditing = !isEditing;
+            const btn = document.getElementById('editBtn');
+            btn.querySelector('i').className = isEditing
+                ? 'fa-solid fa-eye'
+                : 'fa-solid fa-pen-to-square';
+            btn.title = isEditing ? 'View' : 'Edit show';
+            if (isEditing) showEditForm(currentShow);
+            else showDetail(currentShow);
+        }
+
+        function showEditForm(show) {
+            const content = document.getElementById('modalContent');
+            const fields = [
+                { key: 'date', label: 'Date', type: 'date' },
+                { key: 'city', label: 'City', type: 'text' },
+                { key: 'airport', label: 'Airport (IATA)', type: 'text' },
+                { key: 'country', label: 'Country', type: 'text' },
+                { key: 'venue', label: 'Venue', type: 'text' },
+                { key: 'address', label: 'Address', type: 'text' },
+                { key: 'name', label: 'Name', type: 'text' },
+                { key: 'deal', label: 'Deal', type: 'text' },
+                { key: 'openers', label: 'Openers', type: 'text' },
+                { key: 'schedule', label: 'Schedule', type: 'text' },
+                { key: 'email', label: 'Email', type: 'text' },
+                { key: 'phone', label: 'Phone', type: 'text' },
+                { key: 'flight', label: 'Flight', type: 'text' },
+                { key: 'status', label: 'Status', type: 'text' },
+                { key: 'hotel', label: 'Hotel', type: 'text' },
+                { key: 'notes', label: 'Notes', type: 'textarea' },
+                { key: 'visaCDN', label: 'Visa 🇨🇦 CDN', type: 'text' },
+                { key: 'visaMEX', label: 'Visa 🇲🇽 MEX', type: 'text' },
+                { key: 'visaNote', label: 'Visa Note', type: 'text' },
+            ];
+
+            const fieldHtml = fields.map(f => {
+                const val = (show[f.key] || '').replace(/"/g, '&quot;');
+                const cls = 'w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-3 py-2 text-sm focus:outline-none';
+                const input = f.type === 'textarea'
+                    ? `<textarea id="ef_${f.key}" rows="3" class="${cls} resize-none">${show[f.key] || ''}</textarea>`
+                    : `<input id="ef_${f.key}" type="${f.type}" value="${val}" class="${cls}">`;
+                return `<div>
+                    <label class="block text-[10px] uppercase tracking-widest text-zinc-500 mb-1">${f.label}</label>
+                    ${input}
+                </div>`;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="space-y-4">
+                    ${fieldHtml}
+                    <div class="grid grid-cols-2 gap-2 pt-2">
+                        <button onclick="saveEdit()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-black font-bold py-3 rounded-2xl text-sm">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Save
+                        </button>
+                        <button onclick="cancelEdit()" class="bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-800 font-bold py-3 rounded-2xl text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        function saveEdit() {
+            const fields = ['date', 'city', 'airport', 'country', 'venue', 'address', 'name', 'deal', 'openers',
+                'schedule', 'email', 'phone', 'flight', 'status', 'hotel', 'notes', 'visaCDN', 'visaMEX', 'visaNote'];
+            const updated = { ...currentShow };
+            fields.forEach(k => {
+                const el = document.getElementById('ef_' + k);
+                if (el) updated[k] = el.value.trim() || undefined;
+            });
+            // Clean undefined keys
+            Object.keys(updated).forEach(k => { if (updated[k] === undefined) delete updated[k]; });
+
+            const idx = liveData.findIndex(s => s.id === updated.id);
+            if (idx !== -1) liveData[idx] = updated;
+            else liveData.push(updated);
+
+            localStorage.setItem(LS_DATA, JSON.stringify(liveData));
+            pushToSheet(); // Auto-push on save
+            renderShows(liveData);
+            populateDropdowns();
+            renderTourLegs();
+            filterBy(document.getElementById('countryFilter').value);
+            currentShow = updated;
+            isEditing = false;
+            const btn = document.getElementById('editBtn');
+            btn.querySelector('i').className = 'fa-solid fa-pen-to-square';
+            btn.title = 'Edit show';
+            showDetail(updated);
+        }
+
+        function cancelEdit() {
+            isEditing = false;
+            const btn = document.getElementById('editBtn');
+            btn.querySelector('i').className = 'fa-solid fa-pen-to-square';
+            btn.title = 'Edit show';
+            showDetail(currentShow);
+        }
+
+        function switchTab(tab) {
+            const views = ['shows', 'flights', 'settings'];
+            views.forEach(v => {
+                document.getElementById(v + 'View').classList.toggle('hidden', tab !== v);
+                const btn = document.getElementById('bottom-' + v);
+                btn.classList.toggle('text-red-500', tab === v);
+                btn.classList.toggle('border-t-4', tab === v);
+                btn.classList.toggle('border-red-600', tab === v);
+                btn.classList.toggle('text-zinc-400', tab !== v);
+            });
+            // Filter bar only on shows
+            document.getElementById('filterDropdown').classList.toggle('hidden', tab !== 'shows');
+            // Update data status when settings opens
+            if (tab === 'settings') updateDataStatus();
+        }
+
+        function filterBy(country) {
+            let filtered = liveData;
+            if (country === 'other') filtered = liveData.filter(s => !['Japan', 'Taiwan', 'China'].includes(s.country));
+            else if (country !== 'all') filtered = liveData.filter(s => s.country === country);
+            renderShows(filtered);
+        }
+
+        function searchShows() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!term) return filterBy(document.getElementById('countryFilter').value);
+            const results = liveData.filter(s =>
+                s.city.toLowerCase().includes(term) ||
+                (s.venue && s.venue.toLowerCase().includes(term)) ||
+                s.date.includes(term)
+            );
+            renderShows(results);
+        }
+
+        function countdown() {
+            const shows = liveData.map(s => new Date(s.date + 'T00:00:00'));
+            const now = new Date();
+            const next = shows.find(d => d >= now) || shows[shows.length - 1];
+            const diff = next - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerHTML = days > 0 ? `${days}<span class="text-xs align-super ml-1">d</span>` : 'GO!';
+        }
+
+        window.onload = () => {
+            // Load saved URL into input (fall back to default sheet URL)
+            const savedUrl = localStorage.getItem(LS_URL) || DEFAULT_SHEET_URL;
+            document.getElementById('sheetUrl').value = savedUrl;
+
+            // Load data (localStorage > hardcoded)
+            loadData();
+
+            renderShows(liveData);
+            populateDropdowns();
+            renderTourLegs();
+            countdown();
+            setInterval(countdown, 3600000);
+            switchTab('shows');
+            document.getElementById('countryFilter').value = 'all';
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('%c✅ Service Worker registered — offline ready!', 'color:#22c55e'))
+                    .catch(err => console.log('SW registration failed:', err));
+            }
+
+            console.log('%c🤘 BCG Tour App — OFFLINE READY!', 'color:#ef4444; font-size:13px; font-family:monospace');
+        };
+
+        // Close modal on background tap
+        document.getElementById('modal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+
+</html>
