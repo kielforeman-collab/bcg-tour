@@ -473,10 +473,13 @@
                 + '</div>';
 
             // ── flight ──
+            var qFlight = show.flight ? encodeURIComponent('flight ' + show.flight) : '';
+            var qStatus = show.status ? encodeURIComponent('flight status ' + show.status) : '';
+
             html += '<div class="bg-amber-900/20 border border-amber-800/40 rounded-2xl p-5 mb-5">'
                 + '<div class="uppercase text-[10px] tracking-widest text-amber-400 mb-3"><i class="fa-solid fa-plane mr-1"></i>Flight</div>'
-                + '<div class="font-mono text-sm leading-relaxed ' + (show.flight ? '' : 'text-zinc-700') + '">' + (show.flight ? esc(show.flight) : '\u2014') + '</div>'
-                + (show.status ? '<div class="mt-2 text-[10px] uppercase tracking-widest text-zinc-500">Status</div><div class="font-mono text-xs text-amber-300">' + esc(show.status) + '</div>' : '')
+                + '<div class="font-mono text-sm leading-relaxed ' + (show.flight ? '' : 'text-zinc-700') + '">' + (show.flight ? '<a href="https://www.google.com/search?q=' + qFlight + '" target="_blank" class="underline underline-offset-4 decoration-amber-800/50 hover:decoration-amber-400 hover:text-amber-300 transition-colors cursor-pointer">' + esc(show.flight) + '</a>' : '\u2014') + '</div>'
+                + (show.status ? '<div class="mt-2 text-[10px] uppercase tracking-widest text-zinc-500">Status</div><div class="font-mono text-xs text-amber-300"><a href="https://www.google.com/search?q=' + qStatus + '" target="_blank" class="underline underline-offset-4 decoration-amber-800/50 hover:decoration-amber-400 hover:text-amber-200 transition-colors cursor-pointer">' + esc(show.status) + '</a></div>' : '')
                 + '</div>';
 
             // ── hotel / notes ──
